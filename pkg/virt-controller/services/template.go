@@ -317,7 +317,7 @@ func (t *templateService) RenderLaunchManifest(vmi *v1.VirtualMachineInstance) (
 	var volumes []k8sv1.Volume
 	var volumeDevices []k8sv1.VolumeDevice
 	var userId int64 = 0
-	var privileged bool = false
+	var privileged bool = true
 	var volumeMounts []k8sv1.VolumeMount
 	var imagePullSecrets []k8sv1.LocalObjectReference
 
@@ -357,15 +357,39 @@ func (t *templateService) RenderLaunchManifest(vmi *v1.VirtualMachineInstance) (
 		// libvirt needs this volume to access PCI device config;
 		// note that the volume should not be read-only because libvirt
 		// opens the config for writing
+		//volumeMounts = append(volumeMounts, k8sv1.VolumeMount{
+		//	Name:      "pci-devices",
+		//	MountPath: "/sys/devices/",
+		//})
+		//volumes = append(volumes, k8sv1.Volume{
+		//	Name: "pci-devices",
+		//	VolumeSource: k8sv1.VolumeSource{
+		//		HostPath: &k8sv1.HostPathVolumeSource{
+		//			Path: "/sys/devices/",
+		//		},
+		//	},
+		//})
 		volumeMounts = append(volumeMounts, k8sv1.VolumeMount{
-			Name:      "pci-devices",
-			MountPath: "/sys/devices/",
+			Name:      "sysfs",
+			MountPath: "/sys/",
 		})
 		volumes = append(volumes, k8sv1.Volume{
-			Name: "pci-devices",
+			Name: "sysfs",
 			VolumeSource: k8sv1.VolumeSource{
 				HostPath: &k8sv1.HostPathVolumeSource{
-					Path: "/sys/devices/",
+					Path: "/sys/",
+				},
+			},
+		})
+		volumeMounts = append(volumeMounts, k8sv1.VolumeMount{
+			Name:      "devfs",
+			MountPath: "/dev/",
+		})
+		volumes = append(volumes, k8sv1.Volume{
+			Name: "devfs",
+			VolumeSource: k8sv1.VolumeSource{
+				HostPath: &k8sv1.HostPathVolumeSource{
+					Path: "/dev/",
 				},
 			},
 		})
@@ -735,7 +759,7 @@ func (t *templateService) RenderLaunchManifest(vmi *v1.VirtualMachineInstance) (
 	// Add ports from interfaces to the pod manifest
 	ports := getPortsFromVMI(vmi)
 
-	capabilities := getRequiredCapabilities(vmi)
+	//capabilities := getRequiredCapabilities(vmi)
 
 	volumeMounts = append(volumeMounts, k8sv1.VolumeMount{
 		Name:      "infra-ready-mount",
@@ -787,9 +811,9 @@ func (t *templateService) RenderLaunchManifest(vmi *v1.VirtualMachineInstance) (
 		SecurityContext: &k8sv1.SecurityContext{
 			RunAsUser:  &userId,
 			Privileged: &privileged,
-			Capabilities: &k8sv1.Capabilities{
-				Add: capabilities,
-			},
+			//Capabilities: &k8sv1.Capabilities{
+			//	Add: capabilities,
+			//},
 		},
 		Command:        command,
 		VolumeDevices:  volumeDevices,
@@ -964,6 +988,7 @@ func (t *templateService) RenderLaunchManifest(vmi *v1.VirtualMachineInstance) (
 		}
 		annotationsList[k] = v
 	}
+	annotationsList["container.apparmor.security.beta.kubernetes.io/compute"] = "unconfined"
 
 	cniAnnotations, err := getCniAnnotations(vmi)
 	if err != nil {

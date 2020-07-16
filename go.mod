@@ -1,5 +1,7 @@
 module kubevirt.io/kubevirt
 
+go 1.14
+
 require (
 	github.com/Azure/go-autorest/autorest v0.9.1 // indirect
 	github.com/Azure/go-autorest/autorest/adal v0.6.0 // indirect
@@ -26,7 +28,7 @@ require (
 	github.com/gogo/protobuf v1.3.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/mock v1.2.0
-	github.com/golang/protobuf v1.3.1
+	github.com/golang/protobuf v1.3.2
 	github.com/google/goexpect v0.0.0-20190425035906-112704a48083
 	github.com/google/gofuzz v1.0.0
 	github.com/google/goterm v0.0.0-20190311235235-ce302be1d114 // indirect
@@ -36,7 +38,6 @@ require (
 	github.com/k8snetworkplumbingwg/network-attachment-definition-client v0.0.0-20191119172530-79f836b90111
 	github.com/krolaw/dhcp4 v0.0.0-20180925202202-7cead472c414
 	github.com/libvirt/libvirt-go v5.0.0+incompatible
-	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/mattn/go-runewidth v0.0.0-20181218000649-703b5e6b11ae // indirect
 	github.com/mfranczy/crd-rest-coverage v0.1.0
 	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
@@ -48,7 +49,7 @@ require (
 	github.com/operator-framework/operator-lifecycle-manager v0.0.0-20190128024246-5eb7ae5bdb7a
 	github.com/operator-framework/operator-marketplace v0.0.0-20190508022032-93d436f211c1
 	github.com/pborman/uuid v1.2.0
-	github.com/prometheus/client_golang v0.9.3
+	github.com/prometheus/client_golang v1.1.0
 	github.com/smartystreets/goconvey v0.0.0-20190731233626-505e41936337 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5
@@ -75,7 +76,7 @@ require (
 
 replace (
 	github.com/Azure/go-autorest => github.com/Azure/go-autorest v11.0.0+incompatible
-	github.com/coreos/prometheus-operator => github.com/coreos/prometheus-operator v0.0.0-20181206002233-dd6f23e7207c
+	github.com/coreos/prometheus-operator => github.com/coreos/prometheus-operator v0.0.0-20200615070848-8b9d02446738
 	github.com/go-kit/kit => github.com/go-kit/kit v0.3.0
 	github.com/golang/glog => ./staging/src/github.com/golang/glog
 	github.com/openshift/api => github.com/openshift/api v0.0.0-20191219222812-2987a591a72c
